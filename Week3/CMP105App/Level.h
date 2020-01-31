@@ -26,4 +26,7 @@ private:
 	sf::CircleShape circle;
 	sf::CircleShape circle2;
 	sf::CircleShape circle3;
+
+	sf::Font font;
+	sf::Text text;
 };

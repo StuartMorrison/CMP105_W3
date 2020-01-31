@@ -1,6 +1,6 @@
 #include "Level.h"
 
-float speed = 300.f, speed2 = 300.f, speed3X = 300.f, speed3Y = 300.f;
+float speed = 300.f, speed2 = 300.f, speed3X = 300.f, speed3Y = 300.f, changeSpeed = 0.f;
 float movement = 0, movementX = 0, movementY = 0;
 float movementX3 = 0, movementY3 = 0;
 
@@ -85,6 +85,58 @@ void Level::handleInput(float dt)
 
 		}
 	}
+
+	if (input->isKeyDown(sf::Keyboard::Equal))
+	{
+		changeSpeed =+ 2;
+		input->setKeyUp(sf::Keyboard::Equal);
+		if (speed3X > 0 && speed3Y > 0)
+		{
+			speed3X += changeSpeed;
+			speed3Y += changeSpeed;
+		}
+		else if (speed3X > 0 && speed3Y < 0)
+		{
+			speed3X += changeSpeed;
+			speed3Y -= changeSpeed;
+		}
+		else if (speed3X < 0 && speed3Y > 0)
+		{
+			speed3X -= changeSpeed;
+			speed3Y += changeSpeed;
+		}
+		else if (speed3X < 0 && speed3Y < 0)
+		{
+			speed3X -= changeSpeed;
+			speed3Y -= changeSpeed;
+		}
+	}
+
+	if (input->isKeyDown(sf::Keyboard::Hyphen))
+	{
+		changeSpeed =- 2;
+		input->setKeyUp(sf::Keyboard::Hyphen);
+		if (speed3X > 0 && speed3Y > 0)
+		{
+			speed3X += changeSpeed;
+			speed3Y += changeSpeed;
+		}
+		else if (speed3X > 0 && speed3Y < 0)
+		{
+			speed3X += changeSpeed;
+			speed3Y -= changeSpeed;
+		}
+		else if (speed3X < 0 && speed3Y > 0)
+		{
+			speed3X -= changeSpeed;
+			speed3Y += changeSpeed;
+		}
+		else if (speed3X < 0 && speed3Y < 0)
+		{
+			speed3X -= changeSpeed;
+			speed3Y -= changeSpeed;
+		}
+	}
 }
 
 // Update game objects
@@ -107,28 +159,28 @@ void Level::update(float dt)
 	if (circle3.getPosition().x + 60 > pos.x)
 	{
 		movementX3 = 0;
-		speed3X = -300.f;
+		speed3X = speed3X * -1;
 		
 	}
 
 	if (circle3.getPosition().x < 0)
 	{
 		movementX3 = 0;
-		speed3X = 300.f;
+		speed3X = speed3X * -1;
 		
 	}
 
 	if (circle3.getPosition().y + 60 > pos.y)
 	{
 		movementY3 = 0;
-		speed3Y = -300.f;
+		speed3Y = speed3Y * -1;
 		
 	}
 
 	if (circle3.getPosition().y < 0)
 	{
 		movementY3 = 0;
-		speed3Y = 300.f;
+		speed3Y = speed3Y * -1;
 		
 	}
 
@@ -147,9 +199,25 @@ void Level::render()
 {
 	beginDraw();
 
+	if (!font.loadFromFile("font/arial.ttf"))
+	{
+		std::cout << "Error loading font\n";
+	}
+
+	std::string Xspeed = std::to_string(speed3X);
+	std::string Yspeed = std::to_string(speed3Y);
+
+	text.setFont(font);
+	text.setString("x-axis speed:" + Xspeed + " and y-axis speed: " + Yspeed);
+	text.setCharacterSize(24);
+	text.setFillColor(sf::Color::Yellow);
+	text.setPosition(0, 0);
+
 	window->draw(circle);
 	window->draw(circle2);
 	window->draw(circle3);
+
+	window->draw(text);
 
 	endDraw();
 }
